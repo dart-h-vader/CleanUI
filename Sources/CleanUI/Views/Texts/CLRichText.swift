@@ -25,6 +25,7 @@ public struct CLRichText: View {
     var string: String
     var font: Font
     var foregroundColor: Color
+    var lineLimit: Int
     var attributes: [Attribute]
     
     /// - Parameters:
@@ -32,10 +33,11 @@ public struct CLRichText: View {
     ///   - font: The `Font`, default is `.subheadline`
     ///   - foregroundColor: The text color, default is `Color.defaultText`
     ///   - attributes: The attributes which should be highlighted, default is `[.links, .hashtags, .mentions]
-    public init(_ string: String, font: Font = .subheadline, foregroundColor: Color = Color.defaultText, attributes: [Attribute] = [.links(), .hashtags(), .mentions()]){
+    public init(_ string: String, font: Font = .subheadline, foregroundColor: Color = Color.defaultText, lineLimit: Int = 05, attributes: [Attribute] = [.links(), .hashtags(), .mentions()]){
         self.string = string
         self.font = font
         self.foregroundColor = foregroundColor
+        self.lineLimit = lineLimit
         self.attributes = attributes
     }
     
@@ -48,7 +50,7 @@ public struct CLRichText: View {
             .fixedSize(horizontal: false, vertical: true)
             .overlay(
                 GeometryReader { geometry in
-                    TextViewOverlay(string: string, font: font, maxLayoutWidth: geometry.maxWidth, textViewStore: textViewStore, foregroundColor: foregroundColor, attributes: attributes)
+                    TextViewOverlay(string: string, font: font, maxLayoutWidth: geometry.maxWidth, textViewStore: textViewStore, foregroundColor: foregroundColor, lineLimit: lineLimit, attributes: attributes)
                         .frame(height: textViewStore.height)
                 }
                     .frame(height: textViewStore.height)
@@ -64,6 +66,7 @@ internal extension CLRichText {
         var maxLayoutWidth: CGFloat
         var textViewStore: TextViewStore
         var foregroundColor: Color
+        var lineLimit: Int
         var attributes: [Attribute]
         
         @State var attributedText = NSMutableAttributedString()
@@ -77,7 +80,7 @@ internal extension CLRichText {
             textView.addGestureRecognizer(tap)
             
             textView.delegate = context.coordinator
-            
+            textView.textContainer.maximumNumberOfLines = lineLimit
             textView.font = font.toUIFont()
             textView.isSelectable = true
             textView.isUserInteractionEnabled = true
@@ -221,7 +224,7 @@ internal extension CLRichText {
 
 struct CLRichText_Previews: PreviewProvider {
     static var previews: some View {
-        CLRichText("Hallo #knogglHashtag www.knoggl.com @knogglMention", attributes: [
+        CLRichText("Hallo #knogglHashtag www.knoggl.com @knogglMention. This is a loreum ipseum level text I believe.Lorem ipsum dolor sit amet, @consectetur adipiscing elit. www.google.com Quisque laoreet, urna ac egestas gravida, tellus diam hendrerit odio, quis aliquet magna lacus nec velit. Phasellus quis tempor velit, sed fringilla diam. Integer vitae dui aliquet, condimentum augue eu, auctor nunc. Aliquam erat volutpat. Phasellus dui augue, consequat malesuada sodales ac, semper ac velit. Vivamus gravida gravida molestie. Aliquam hendrerit vehicula egestas. Sed aliquet quis orci quis blandit. Sed interdum posuere nisl in tincidunt. Nam vel nisi id diam vestibulum lacinia sed in augue. Nunc lacus magna, accumsan in mi vitae, semper placerat metus. Ut dui leo, commodo interdum malesuada sed, pretium in magna. Cras risus mi, ultricies id quam eu, maximus vestibulum ipsum. Aenean varius semper nunc, vel varius lectus dignissim id.", attributes: [
             .links { linkString in
                 CUAlertMessage.show("Link: " + linkString)
             },
