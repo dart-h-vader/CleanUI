@@ -25,6 +25,7 @@ public struct CLRichText: View {
     var string: String
     var font: Font
     var foregroundColor: Color
+    var lineLimit: Int
     var attributes: [Attribute]
     
     /// - Parameters:
@@ -32,10 +33,11 @@ public struct CLRichText: View {
     ///   - font: The `Font`, default is `.subheadline`
     ///   - foregroundColor: The text color, default is `Color.defaultText`
     ///   - attributes: The attributes which should be highlighted, default is `[.links, .hashtags, .mentions]
-    public init(_ string: String, font: Font = .subheadline, foregroundColor: Color = Color.defaultText, attributes: [Attribute] = [.links(), .hashtags(), .mentions()]){
+    public init(_ string: String, font: Font = .subheadline, foregroundColor: Color = Color.defaultText, lineLimit: Int = 05, attributes: [Attribute] = [.links(), .hashtags(), .mentions()]){
         self.string = string
         self.font = font
         self.foregroundColor = foregroundColor
+        self.lineLimit = lineLimit
         self.attributes = attributes
     }
     
@@ -46,6 +48,7 @@ public struct CLRichText: View {
             .foregroundColor(Color.clear)
             .font(font)
             .fixedSize(horizontal: false, vertical: true)
+            .lineLimit(lineLimit)
             .overlay(
                 GeometryReader { geometry in
                     TextViewOverlay(string: string, font: font, maxLayoutWidth: geometry.maxWidth, textViewStore: textViewStore, foregroundColor: foregroundColor, attributes: attributes)
