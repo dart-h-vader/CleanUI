@@ -183,7 +183,7 @@ class TextView: UITextView {
         }
         
         return sizeThatFits(
-            CGSize(width: maxLayoutWidth, height: .greatestFiniteMagnitude)
+            CGSize(width: maxLayoutWidth, height: 10)
         )
     }
 }
