@@ -47,7 +47,7 @@ public struct CLRichText: View {
         Text(string)
             .foregroundColor(Color.clear)
             .font(font)
-            .fixedSize(horizontal: false, vertical: true)
+            //.fixedSize(horizontal: false, vertical: true)
             .overlay(
                 GeometryReader { geometry in
                     TextViewOverlay(string: string, font: font, maxLayoutWidth: geometry.maxWidth, textViewStore: textViewStore, foregroundColor: foregroundColor, lineLimit: lineLimit, attributes: attributes)
@@ -55,6 +55,7 @@ public struct CLRichText: View {
                 }
                     .frame(height: textViewStore.height)
             )
+            .frame(height: textViewStore.height)
     }
 }
 
@@ -91,7 +92,9 @@ internal extension CLRichText {
             textView.textContainer.lineFragmentPadding = 0
             textView.adjustsFontForContentSizeCategory = true
             textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-            
+            textView.translatesAutoresizingMaskIntoConstraints = true
+            textView.sizeToFit()
+            textView.isScrollEnabled = false
             return textView
         }
         
