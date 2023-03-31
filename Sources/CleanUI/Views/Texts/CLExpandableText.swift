@@ -1,25 +1,25 @@
-//  Copyright © 2021 - present Julian Gerhards
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//  http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-//  GitHub https://github.com/knoggl/CleanUI
-//
+    //  Copyright © 2021 - present Julian Gerhards
+    //
+    //  Licensed under the Apache License, Version 2.0 (the "License");
+    //  you may not use this file except in compliance with the License.
+    //  You may obtain a copy of the License at
+    //
+    //  http://www.apache.org/licenses/LICENSE-2.0
+    //
+    //  Unless required by applicable law or agreed to in writing, software
+    //  distributed under the License is distributed on an "AS IS" BASIS,
+    //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    //  See the License for the specific language governing permissions and
+    //  limitations under the License.
+    //
+    //  GitHub https://github.com/knoggl/CleanUI
+    //
 
 import SwiftUI
 import Combine
 
-/// Returns an ``CLExpandableText`` which has a show more / show less button if the
-/// provided string is longer than the `characterLimit`
+    /// Returns an ``CLExpandableText`` which has a show more / show less button if the
+    /// provided string is longer than the `characterLimit`
 public struct CLExpandableText: View {
     
     var string: String
@@ -32,15 +32,15 @@ public struct CLExpandableText: View {
     var expandButtonColor: Color
     
     
-    /// - Parameters:
-    ///   - string: The `String` to show
-    ///   - characterLimit: The character limit; If the `string` is longer than the character limit, a show more / show less button gets shown
-    ///   - font: The `Font, default is `.subheadline`
-    ///   - richText: Should the Text be an ``CLRichText``?
-    ///   - foregroundColor: The Text color
-    ///   - alternativeExpandButtonAction: If you provide an action here, the default action for the show more button gets overwritten
-    ///   - attributes: The attributes which should be highlighted for the ``CLRichText``, default is `[.links, .hashtags, .mentions]
-    ///   - expandButtonColor: Set the foregroundColor for the expand button, default is `Color.grayText`
+        /// - Parameters:
+        ///   - string: The `String` to show
+        ///   - characterLimit: The character limit; If the `string` is longer than the character limit, a show more / show less button gets shown
+        ///   - font: The `Font, default is `.subheadline`
+        ///   - richText: Should the Text be an ``CLRichText``?
+        ///   - foregroundColor: The Text color
+        ///   - alternativeExpandButtonAction: If you provide an action here, the default action for the show more button gets overwritten
+        ///   - attributes: The attributes which should be highlighted for the ``CLRichText``, default is `[.links, .hashtags, .mentions]
+        ///   - expandButtonColor: Set the foregroundColor for the expand button, default is `Color.grayText`
     public init(_ string: String, characterLimit: Int = 150, font: Font = .subheadline, richText: Bool = true, foregroundColor: Color = Color.defaultText, alternativeExpandButtonAction: (() -> Void)? = nil, attributes: [Attribute] = [.links(), .hashtags(), .mentions()], expandButtonColor: Color = Color.grayText) {
         self.characterLimit = characterLimit
         self.string = string
@@ -74,11 +74,22 @@ public struct CLExpandableText: View {
                         .frame(maxWidth: .infinity, alignment: .topLeading)
                 }
             }else {
-                Text(expanded || string.count < characterLimit ? string : String(string.trim().prefix(characterLimit) + String(string.count > characterLimit ? "..." : "")))
-                    .foregroundColor(foregroundColor)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .topLeading)
+                if (expanded || string.count < characterLimit) {
+                    Text(string)
+                        .foregroundColor(foregroundColor)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                }
+                else {
+                    let firstPrefix = string.trim().prefix(characterLimit)
+                    
+                    Text(String(firstPrefix + String(string.count > characterLimit ? "..." : "")))
+                        .foregroundColor(foregroundColor)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                }
             }
             
             if string.count > characterLimit {

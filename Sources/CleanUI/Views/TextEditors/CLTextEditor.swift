@@ -188,7 +188,7 @@ class TextView: UITextView {
     }
 }
 
-@MainActor class TextViewStore: ObservableObject {
+class TextViewStore: ObservableObject {
     
     @Published var height: CGFloat?
     var heightSet: Bool = false
